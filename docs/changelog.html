@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>更新日志 · LLM Router</title>
+<meta name="description" content="LLM Router 的版本迭代记录（更新日志 / Changelog）。">
+<style>
+:root {
+  --bg: #FAF7F2;
+  --surface: #FFFFFF;
+  --ink: #1E293B;
+  --ink_muted: #63738A;
+  --accent: #1769C2;
+  --accent_soft: #E8F2FF;
+  --hairline: rgba(30,41,59,.09);
+  --mono: "Cascadia Mono",Consolas,monospace;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:15px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{width:min(100% - 40px,900px);margin:0 auto;padding:34px 0 72px}
+.topbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  padding-bottom:18px;margin-bottom:30px;border-bottom:1px solid var(--hairline)}
+.back{color:var(--ink-muted);text-decoration:none;font-size:13.5px;font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;transition:color .18s}
+.back:hover{color:var(--accent)}
+.back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-muted);margin:0 0 10px}
+h1{font-size:clamp(26px,4.4vw,38px);letter-spacing:-.02em;margin:0 0 12px;line-height:1.2}
+.lede{margin:0 0 26px;color:var(--ink-muted);font-size:15px;max-width:62ch}
+.timeline{list-style:none;margin:0;padding:0;position:relative}
+.timeline::before{content:"";position:absolute;left:80px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(to bottom,var(--accent),var(--accent) 70%,transparent);opacity:.28}
+.entry{position:relative;padding:0 0 34px 104px;list-style:none}
+.entry:last-child{padding-bottom:4px}
+.tl-ver{position:absolute;left:0;top:0;font-family:var(--mono);font-size:12.5px;
+  font-weight:800;background:var(--surface);border:1.5px solid var(--accent);color:var(--accent);
+  padding:4px 10px;border-radius:999px;z-index:1;white-space:nowrap}
+.tl-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-top:3px}
+.tl-date{font-size:12.5px;color:var(--ink-muted);font-variant-numeric:tabular-nums;
+  font-family:var(--mono)}
+.tl-now{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:#fff;background:var(--accent);
+  padding:2px 9px;border-radius:999px}
+.kind-block{margin-top:14px}
+.kind-title{font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  margin:0 0 8px}
+.kind-added .kind-title{color:#0F9D58}
+.kind-changed .kind-title{color:var(--accent)}
+ul.items{margin:0;padding:0;list-style:none}
+ul.items li{position:relative;padding-left:18px;font-size:14px;margin-bottom:6px;color:var(--ink)}
+ul.items li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;
+  border-radius:50%;background:var(--hairline)}
+.kind-added ul.items li::before{background:#0F9D58}
+.kind-changed ul.items li::before{background:var(--accent)}
+ul.items code{font-family:var(--mono);font-size:12.5px;background:var(--accent_soft);
+  color:var(--accent);padding:1px 6px;border-radius:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="https://xmtooldev.gf.com.cn/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      返回工具列表
+    </a>
+  </div>
+  <p class="eyebrow">Changelog</p>
+  <h1>LLM Router 更新日志</h1>
+  <p class="lede">可移植的单文件多端点 LLM 路由客户端：P1→P12 优先级候选、熔断、多 key 轮换、推理预算治理、强制 JSON Schema 结构化输出。</p>
+
+  <ol class="timeline">
+    <li class="entry">
+      <span class="tl-ver">v1.0.0</span>
+      <div class="tl-head">
+        <span class="tl-date">2026-11-01</span>
+        <span class="tl-now">当前版本</span>
+      </div>
+      <div class="kind-block kind-added">
+        <p class="kind-title">新增</p>
+        <ul class="items">
+          <li>P1→P12 优先级候选路由：YAML / 环境变量声明，多 key 池展开，URL+MODEL+KEY 三元组去重，缺槽跳过不中断</li>
+          <li>熔断状态机：硬错（连接 / 401 / 403 / 404）判死 300s 冷却，恢复后按实测平均延迟重排健康端点</li>
+          <li>多 key 轮换：429 / 403 自动切下一把 key，端点不熔断不掉链</li>
+          <li>推理预算治理：预算耗尽（<code>finish_reason=length</code> 且 reasoning 占满）自动放大 <code>max_tokens</code> 重试一次，上限可配</li>
+          <li>deadline 预算闸：外层超时硬约束，内层重试不跨越，耗尽抛 <code>LLMDeadlineExceeded</code></li>
+          <li><code>call_llm_json()</code> 强制 JSON Schema 结构化输出（tool_choice 约束，非提示词自觉）</li>
+          <li>进程内 TTL Prompt 缓存（默认 300s）、拒答检测、多模态图片（可选 Pillow 压缩）</li>
+        </ul>
+      </div>
+      <div class="kind-block kind-changed">
+        <p class="kind-title">工程</p>
+        <ul class="items">
+          <li>单文件 <code>llm_router.py</code>，唯一必装依赖 <code>requests</code>（PyYAML / Pillow 可选缺失自动降级）</li>
+          <li>36 项离线单元测试全部通过（mock HTTP，不打真实端点）</li>
+          <li>凭据经 <code>${VAR}</code> 环境变量注入，配置与诊断视图零明文</li>
+        </ul>
+      </div>
+    </li>
+  </ol>
+</div>
+</body>
+</html>
