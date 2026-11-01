@@ -1,0 +1,45 @@
+# llm-router 多端点候选配置（示例）
+#
+# 放置位置（二选一）：
+#   - 与 llm_router.py 同目录，命名 llm_endpoints.yaml（自动发现）
+#   - 任意路径，通过环境变量 LLM_ENDPOINTS_YAML 指定
+#
+# 密钥不要写进本文件：用 ${VAR} 或 ${VAR:默认值} 引用环境变量，
+# 或 api_key 直接给 ${LLM_P1_KEY} 这种形式。
+
+defaults:
+  timeout: 120          # 单次请求超时（秒）
+  model: my-model       # 未显式指定模型时的默认模型
+  max_tokens: 2000
+  temperature: 0.3
+  retry_max: 3          # 单端点重试次数
+  retry_backoff: [1, 3, 5]
+
+circuit_breaker:
+  enabled: true
+  cooldown_seconds: 300 # 判死后熔断冷却时长
+
+endpoints:
+  # P1：主链路。api_key 用列表 → 多 key 轮换（429/403 时按序切下一把）
+  - name: primary
+    priority: 1
+    api_url: https://api.example-llm.com/v1
+    api_key:
+      - ${LLM_P1_KEY1}
+      - ${LLM_P1_KEY2}
+    model: my-model
+
+  # P2：兜底。优先级数字越小越先被调用
+  - name: fallback
+    priority: 2
+    api_url: ${LLM_P2_URL}
+    api_key: ${LLM_P2_KEY}
+    model: my-model-lite
+
+  # P3：自建网关（ssl_verify: false 仅用于自签证书内网场景）
+  # - name: self-hosted
+  #   priority: 3
+  #   api_url: http://10.0.0.5:8000/v1
+  #   api_key: ${LLM_P3_KEY}
+  #   model: my-model-mini
+  #   ssl_verify: false
