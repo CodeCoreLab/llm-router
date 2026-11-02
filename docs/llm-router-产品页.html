@@ -669,12 +669,38 @@ section,#top,footer{contain:layout style}
 .demo-log .ok{color:var(--success)}
 .demo-log .warn{color:var(--peach-real)}
 .demo-log .bad{color:var(--danger)}
+
+/* ── Nav + Back Link ──────────────────────────────────────────────── */
+.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  background:rgba(248,250,252,.82);border-bottom:1px solid var(--hairline);transition:all var(--t-state)}
+.nav-in{max-width:var(--maxw);margin:0 auto;padding:0 var(--s5);height:54px;display:flex;align-items:center;gap:var(--s5)}
+.nav .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:-.01em;color:var(--ink)}
+.nav .brand svg{flex:none}
+.nav-links{display:flex;gap:6px;margin-left:auto;align-items:center}
+.nav-links a{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:var(--r-full);font-size:13px;
+  color:var(--ink-soft);transition:all var(--t-fast);background:transparent;border:1px solid transparent}
+.nav-links a:hover{color:var(--ink);background:rgba(59,130,246,.06);border-color:var(--hairline-strong)}
+.nav-links .back-site{display:inline-flex;align-items:center;gap:.28rem}
+@media(max-width:720px){.nav-links .back-site{display:none}}
 </style>
 </head>
 <body>
 
 <!-- ═══════════ HERO — 粒子网络（呼应「多端点互联」） ═══════════ -->
-<header class="hero" id="top">
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="https://xmtooldev.gf.com.cn/">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="url(#lg1)"/><path d="M6 10h6l4 6 4-6h6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="22" r="3" fill="#fff" opacity=".92"/><defs><linearGradient id="lg1" x1="0" y1="0" x2="32" y2="32"><stop stop-color="#3B82F6"/><stop offset=".5" stop-color="#06B6D4"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs></svg>
+      LLM Router
+    </a>
+    <nav class="nav-links">
+      <a href="https://xmtooldev.gf.com.cn/">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M15 6l-6 6 6 6"/></svg>
+        工具列表
+      </a>
+    </nav>
+  </div>
+</header><header class="hero" id="top">
   <div class="hero-grid"></div>
   <canvas class="section-particles" data-scene="network" aria-hidden="true"></canvas>
   <div class="wrap hero-inner">
