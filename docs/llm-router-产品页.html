@@ -80,6 +80,7 @@
   --ease-in-soft:cubic-bezier(.7,0,.84,0);
   --ease-io:cubic-bezier(.65,0,.35,1);
   --t-instant:120ms;
+  --t-fast:160ms;
   --t-state:240ms;
   --t-layout:380ms;
   --t-enter:560ms;
@@ -747,7 +748,6 @@ section,#top,footer{contain:layout style}
         </div>
       </div>
     </div>
-  </div>
 
 
     <div class="hero-stats">
@@ -1753,11 +1753,12 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
   else boot();
 })();
 </script>
-
+<script>
 /* ═══════════════ Hero Animated Demo ═══════════════ */
 (function(){
   const cv = document.getElementById('heroDemoCanvas');
   if(!cv) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const ctx = cv.getContext('2d');
   let W, H, nodes = [], particles = [], animId;
   
@@ -1871,5 +1872,6 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
     }, m.delay);
   });
 })();
+</script>
 </body>
 </html>
