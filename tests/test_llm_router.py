@@ -353,7 +353,7 @@ class TestListEndpointsMasked(unittest.TestCase):
     def test_key_masked(self):
         cfg = {"endpoints": [
             {"name": "a", "priority": 1, "api_url": "http://a/v1",
-             "api_key": "sk-verylongsecretkey-1234567890", "model": "m"},
+             "api_key": "sk-REDACTED", "model": "m"},
         ]}
         with mock.patch.object(llm_router, "_load_yaml_config", return_value=cfg):
             eps = llm_router.list_endpoints()

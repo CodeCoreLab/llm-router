@@ -25,21 +25,21 @@ endpoints:
     priority: 1
     api_url: https://api.example-llm.com/v1
     api_key:
-      - ${LLM_P1_KEY1}
-      - ${LLM_P1_KEY2}
+      - ${YOUR_KEY_HERE}
+      - ${YOUR_KEY_HERE}
     model: my-model
 
   # P2：兜底。优先级数字越小越先被调用
   - name: fallback
     priority: 2
     api_url: ${LLM_P2_URL}
-    api_key: ${LLM_P2_KEY}
+    api_key: ${YOUR_KEY_HERE}
     model: my-model-lite
 
   # P3：自建网关（ssl_verify: false 仅用于自签证书内网场景）
   # - name: self-hosted
   #   priority: 3
   #   api_url: http://10.0.0.5:8000/v1
-  #   api_key: ${LLM_P3_KEY}
+  #   api_key: ${YOUR_KEY_HERE}
   #   model: my-model-mini
   #   ssl_verify: false

@@ -25,12 +25,12 @@
   --peach-real:#F97316;
   --lavender:#8B5CF6;
 
-  --canvas:#FAF7F2;
+  --canvas:#F8FAFC;
   --surface:#FFFFFF;
-  --surface-2:#F5F2EC;
-  --surface-3:#EDEAE3;
-  --hairline:rgba(30,41,59,.08);
-  --hairline-strong:rgba(30,41,59,.14);
+  --surface-2:#F1F5F9;
+  --surface-3:#E2E8F0;
+  --hairline:rgba(148,163,184,.2);
+  --hairline-strong:rgba(148,163,184,.4);
 
   --ink:#1E293B;
   --ink-soft:#475569;
@@ -43,12 +43,12 @@
   --icon-stroke-lg:1.9;
   --icon-stroke-sm:2;
 
-  --stage:#0B1120;
-  --stage-2:#111C33;
-  --stage-ink:#E2E8F0;
-  --stage-ink-dim:#B6C2D6;
-  --stage-muted:#94A3B8;
-  --stage-hairline:rgba(148,163,184,.16);
+  --stage:#F8FAFC;
+  --stage-2:#FFFFFF;
+  --stage-ink:#1E293B;
+  --stage-ink-dim:#475569;
+  --stage-muted:#64748B;
+  --stage-hairline:rgba(148,163,184,.2);
   --term-red:#F87171; --term-amber:#FBBF24; --term-green:#34D399;
 
   --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px;
@@ -118,8 +118,8 @@ canvas{display:block}
 .head{margin-bottom:var(--s12)}
 .head h2{font-size:var(--fs-h2);margin-bottom:var(--s4)}
 .head p{color:var(--ink-muted);font-size:var(--fs-base);max-width:66ch;line-height:var(--lh-body)}
-.head--stage h2{color:var(--stage-ink)}
-.head--stage p{color:var(--stage-muted)}
+.head--stage h2{color:var(--ink)}
+.head--stage p{color:var(--ink-muted)}
 .head-points{
   display:grid;gap:var(--s3);margin-top:var(--s5);max-width:74ch;
   padding-top:var(--s5);border-top:1px solid var(--hairline)}
@@ -127,17 +127,17 @@ canvas{display:block}
 .head-points li{
   display:flex;gap:var(--s3);font-size:var(--fs-sm);line-height:var(--lh-snug);
   color:var(--ink-soft)}
-.head--stage .head-points li{color:var(--stage-ink-dim)}
+.head--stage .head-points li{color:var(--ink-soft)}
 .head-points li::before{
   content:"";flex:none;width:3px;border-radius:2px;margin-top:.42em;
   height:.72em;background:linear-gradient(180deg,var(--primary),var(--cyan))}
 .head-points b{color:var(--ink);font-weight:650;white-space:nowrap;flex:none}
-.head--stage .head-points b{color:var(--stage-ink)}
+.head--stage .head-points b{color:var(--ink)}
 
 section{position:relative;padding:var(--s24) 0}
 section.tight{padding:var(--s20) 0}
-.stage{background:var(--stage);color:var(--stage-ink);overflow:hidden}
-.stage .head p{color:var(--stage-muted)}
+.stage{background:var(--surface);color:var(--ink);overflow:hidden}
+.stage .head p{color:var(--ink-muted)}
 .section-particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .section-inner{position:relative;z-index:1}
 
@@ -148,7 +148,7 @@ section.tight{padding:var(--s20) 0}
     radial-gradient(120% 90% at 78% 8%, rgba(37,99,235,.34) 0%, transparent 58%),
     radial-gradient(90% 80% at 12% 96%, rgba(6,182,212,.24) 0%, transparent 60%),
     linear-gradient(160deg,#0B1120 0%,#111C33 52%,#0B1120 100%);
-  color:var(--stage-ink);padding:var(--s20) 0 var(--s16);overflow:hidden;
+  color:var(--ink);padding:var(--s20) 0 var(--s16);overflow:hidden;
 }
 .hero-grid{
   position:absolute;inset:0;
@@ -169,7 +169,7 @@ section.tight{padding:var(--s20) 0}
 .hero-shot-frame{
   position:relative;border-radius:var(--r-lg);overflow:hidden;
   border:1px solid rgba(148,163,184,.22);
-  background:var(--stage-2);
+  background:var(--surface);
   box-shadow:0 24px 80px rgba(0,0,0,.52), 0 2px 0 rgba(255,255,255,.06) inset;
   transition:transform var(--t-layout) var(--ease-out-expo),
              box-shadow var(--t-layout) var(--ease-out-expo)}
@@ -184,7 +184,7 @@ section.tight{padding:var(--s20) 0}
 .hero-shot-bar i:nth-child(2){background:var(--term-amber)}
 .hero-shot-bar i:nth-child(3){background:var(--term-green)}
 .hero-shot-bar span{
-  margin-left:var(--s3);font-size:var(--fs-micro);color:var(--stage-muted);
+  margin-left:var(--s3);font-size:var(--fs-micro);color:var(--ink-muted);
   letter-spacing:.02em}
 .hero-shot pre{
   margin:0;padding:var(--s5);overflow-x:auto;
@@ -215,11 +215,11 @@ section.tight{padding:var(--s20) 0}
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
 }
 .hero .lede{
-  font-size:var(--fs-lead);color:var(--stage-muted);max-width:62ch;
+  font-size:var(--fs-lead);color:var(--ink-muted);max-width:62ch;
   margin-bottom:var(--s5);line-height:var(--lh-loose)}
 .hero .lede b{color:#E2E8F0;font-weight:600}
 .hero .lede-punch{
-  font-size:var(--fs-lead);color:var(--stage-ink);font-weight:600;
+  font-size:var(--fs-lead);color:var(--ink);font-weight:600;
   margin-bottom:var(--s8);position:relative;padding-left:var(--s4);
   line-height:var(--lh-snug);max-width:56ch}
 .hero .lede-punch::before{
@@ -230,16 +230,16 @@ section.tight{padding:var(--s20) 0}
   padding:0;list-style:none}
 .hero-points li{
   display:flex;gap:var(--s3);align-items:flex-start;
-  font-size:var(--fs-sm);line-height:var(--lh-snug);color:var(--stage-ink-dim)}
+  font-size:var(--fs-sm);line-height:var(--lh-snug);color:var(--ink-soft)}
 .hero-points li::before{
   content:"";flex:none;width:3px;border-radius:2px;margin-top:.44em;
   height:.72em;background:linear-gradient(180deg,var(--primary),var(--cyan))}
-.hero-points b{color:var(--stage-ink);font-weight:650;white-space:nowrap;flex:none}
+.hero-points b{color:var(--ink);font-weight:650;white-space:nowrap;flex:none}
 .hero-note{
-  font-size:var(--fs-sm);color:var(--stage-muted);max-width:100%;
+  font-size:var(--fs-sm);color:var(--ink-muted);max-width:100%;
   margin:var(--s5) 0 0;padding-top:var(--s5);
   border-top:1px solid var(--stage-hairline);line-height:var(--lh-body)}
-.hero-note b{color:var(--stage-ink);font-weight:650}
+.hero-note b{color:var(--ink);font-weight:650}
 .hero-cta{display:flex;flex-wrap:wrap;gap:var(--s3)}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);
@@ -252,7 +252,7 @@ section.tight{padding:var(--s20) 0}
   box-shadow:0 6px 20px rgba(37,99,235,.34)}
 .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(37,99,235,.46);filter:brightness(1.06)}
 .btn-primary:active{transform:translateY(0);filter:brightness(.96)}
-.btn-ghost{background:rgba(148,163,184,.12);color:var(--stage-ink);border:1px solid var(--stage-hairline)}
+.btn-ghost{background:rgba(148,163,184,.12);color:var(--ink);border:1px solid var(--stage-hairline)}
 .btn-ghost:hover{background:rgba(148,163,184,.20);transform:translateY(-2px)}
 .btn:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 .btn svg{width:var(--icon-md);height:var(--icon-md);stroke-width:var(--icon-stroke-sm);flex:none}
@@ -262,7 +262,7 @@ section.tight{padding:var(--s20) 0}
 .stat .n{font-size:var(--fs-metric);font-weight:700;color:#fff;letter-spacing:-.03em;line-height:1.1;
   font-variant-numeric:tabular-nums}
 .stat .n span{font-size:.55em;color:var(--cyan);margin-left:3px;font-weight:600}
-.stat .l{font-size:var(--fs-xs);color:var(--stage-muted);margin-top:5px}
+.stat .l{font-size:var(--fs-xs);color:var(--ink-muted);margin-top:5px}
 
 /* ── 卡片系统 ─────────────────────────────────────────────────────── */
 .card{
@@ -272,7 +272,7 @@ section.tight{padding:var(--s20) 0}
   position:relative;overflow:hidden;isolation:isolate;
 }
 .card:hover{transform:translateY(-3px);box-shadow:var(--e2);border-color:var(--hairline-strong)}
-.card--stage{background:rgba(30,41,59,.42);border-color:var(--stage-hairline);
+.card--stage{background:rgba(30,41,59,.42);border-color:var(--hairline);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .card--stage:hover{background:rgba(30,41,59,.58)}
 .card-topline{position:absolute;top:0;left:0;right:0;height:3px;z-index:1;
@@ -308,8 +308,8 @@ section.tight{padding:var(--s20) 0}
 
 .card h3{font-size:var(--fs-lead);margin-bottom:var(--s2)}
 .card .desc{font-size:var(--fs-sm);color:var(--ink-muted);line-height:1.62}
-.card--stage h3{color:var(--stage-ink)}
-.card--stage .desc{color:var(--stage-muted)}
+.card--stage h3{color:var(--ink)}
+.card--stage .desc{color:var(--ink-muted)}
 .tagline{font-size:var(--fs-xs);font-weight:600;color:var(--primary);margin-top:var(--s3);
   display:inline-flex;align-items:center;gap:5px}
 .tagline::before{content:"▸";opacity:.6}
@@ -366,7 +366,7 @@ section.tight{padding:var(--s20) 0}
   from{opacity:0;transform:translateY(10px);clip-path:inset(0 0 100% 0)}
   to{opacity:1;transform:none;clip-path:inset(0 0 0 0)}}
 
-.fr-title{font-size:var(--fs-h3);margin:var(--s3) 0 var(--s5);color:var(--stage-ink)}
+.fr-title{font-size:var(--fs-h3);margin:var(--s3) 0 var(--s5);color:var(--ink)}
 .fr-list{display:grid;gap:var(--s4)}
 .fr-item{display:flex;gap:var(--s3);align-items:flex-start}
 .fr-item .num{
@@ -385,7 +385,7 @@ section.tight{padding:var(--s20) 0}
 .arch-layer:hover{background:rgba(30,41,59,.66);transform:translateX(5px);border-color:rgba(59,130,246,.42)}
 .arch-layer .ly{font-size:var(--fs-xs);font-weight:700;color:var(--cyan);letter-spacing:.04em;
   display:flex;align-items:center;gap:var(--s2);min-width:0}
-.arch-layer .ly em{font-style:normal;font-size:var(--fs-micro);color:var(--stage-muted);font-weight:500}
+.arch-layer .ly em{font-style:normal;font-size:var(--fs-micro);color:var(--ink-muted);font-weight:500}
 .arch-layer .mods{display:flex;flex-wrap:wrap;gap:7px;min-width:0}
 .chip{
   font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-micro);padding:4px 10px;border-radius:var(--r-sm);
@@ -398,7 +398,7 @@ section.tight{padding:var(--s20) 0}
 .in .arch-layer .chip:nth-child(n+4){animation-delay:80ms}
 .in .arch-layer .chip:nth-child(n+6){animation-delay:120ms}
 @keyframes chipIn{from{opacity:.5;transform:translateY(3px)}to{opacity:1;transform:none}}
-.arrow-down{position:relative;display:grid;place-items:center;color:var(--stage-muted);margin:-6px 0 -6px;
+.arrow-down{position:relative;display:grid;place-items:center;color:var(--ink-muted);margin:-6px 0 -6px;
   height:20px;opacity:.6;font-size:var(--fs-xs)}
 .in .arrow-down{animation:arrowFlow 2.4s var(--ease-io) infinite}
 @keyframes arrowFlow{
@@ -407,22 +407,22 @@ section.tight{padding:var(--s20) 0}
 
 .tech-table{width:100%;border-collapse:separate;border-spacing:0;font-size:var(--fs-sm)}
 .tech-table th{
-  text-align:left;font-size:var(--fs-micro);letter-spacing:.09em;text-transform:uppercase;color:var(--stage-muted);
+  text-align:left;font-size:var(--fs-micro);letter-spacing:.09em;text-transform:uppercase;color:var(--ink-muted);
   padding:0 var(--s4) var(--s3);font-weight:700;border-bottom:1px solid var(--stage-hairline)}
 .tech-table td{padding:var(--s3) var(--s4);border-bottom:1px solid rgba(148,163,184,.09);vertical-align:top;line-height:var(--lh-snug)}
 .tech-table tr:last-child td{border-bottom:none}
 .tech-table tbody tr{transition:background var(--t-instant)}
 .tech-table tbody tr:hover{background:rgba(148,163,184,.06)}
-.tech-table td:first-child{color:var(--stage-ink);font-weight:600;white-space:nowrap}
+.tech-table td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
 .tech-table td:nth-child(2){color:#7DD3FC;font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs)}
-.tech-table td:nth-child(3){color:var(--stage-muted);font-size:var(--fs-sm)}
+.tech-table td:nth-child(3){color:var(--ink-muted);font-size:var(--fs-sm)}
 
 /* ── 差异化对比 ───────────────────────────────────────────────────── */
 .sec-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--s5);margin-bottom:var(--s8)}
 .sec-compare>.card{display:flex;flex-direction:column;height:100%}
 .sec-compare>.card>.desc{flex:1 0 auto}
 .formula{
-  background:var(--stage);border-radius:var(--r-md);padding:var(--s4);margin-top:var(--s4);
+  background:var(--surface);border-radius:var(--r-md);padding:var(--s4);margin-top:var(--s4);
   font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.9;color:#94A3B8;overflow-x:auto;
   font-variant-numeric:tabular-nums}
 .formula b{color:#7DD3FC;font-weight:600}
@@ -467,7 +467,7 @@ section.tight{padding:var(--s20) 0}
   flex:none;width:24px;height:24px;border-radius:var(--r-sm);display:grid;place-items:center;
   font-size:var(--fs-micro);font-weight:700;background:rgba(37,99,235,.10);color:var(--primary)}
 .qs-card pre{
-  margin:var(--s3) 0 0;background:var(--stage);border-radius:var(--r-md);
+  margin:var(--s3) 0 0;background:var(--surface);border-radius:var(--r-md);
   padding:var(--s4);overflow-x:auto;
   font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.85;color:#CBD5E1;white-space:pre}
 .qs-note{font-size:var(--fs-xs);color:var(--ink-subtle);margin-top:var(--s3);line-height:1.6}
@@ -527,7 +527,7 @@ section.tight{padding:var(--s20) 0}
   background:
     radial-gradient(90% 80% at 50% 0%, rgba(37,99,235,.20) 0%, transparent 62%),
     linear-gradient(180deg,var(--stage) 0%,var(--stage-2) 60%,var(--stage) 100%);
-  color:var(--stage-ink);text-align:center;overflow:hidden;padding:var(--s24) 0}
+  color:var(--ink);text-align:center;overflow:hidden;padding:var(--s24) 0}
 .closing-inner{width:100%;display:grid;gap:var(--s4);justify-items:center}
 .closing-inner>h2,.closing-inner>p{max-width:62ch}
 .closing .eyebrow{color:var(--cyan);justify-self:center}
@@ -537,26 +537,26 @@ section.tight{padding:var(--s20) 0}
 .closing h2 b{
   background:linear-gradient(102deg,#7DD3FC,#38BDF8 45%,#A5F3FC);
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.closing p{font-size:var(--fs-lead);color:var(--stage-muted);line-height:var(--lh-loose);margin:0}
-.closing p b{color:var(--stage-ink);font-weight:650}
+.closing p{font-size:var(--fs-lead);color:var(--ink-muted);line-height:var(--lh-loose);margin:0}
+.closing p b{color:var(--ink);font-weight:650}
 .closing-punch{position:relative;padding-top:var(--s5)}
 .closing-punch::before{
   content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
   width:44px;height:2px;border-radius:2px;
   background:linear-gradient(90deg,var(--primary),var(--cyan))}
-.closing-punch span{display:block;margin-top:var(--s2);color:var(--stage-ink);font-weight:700}
+.closing-punch span{display:block;margin-top:var(--s2);color:var(--ink);font-weight:700}
 .closing-cta{display:flex;flex-wrap:wrap;gap:var(--s3);justify-content:center;margin-top:var(--s6)}
 
 /* ── Footer ───────────────────────────────────────────────────────── */
-footer{background:var(--stage);color:var(--stage-muted);padding:var(--s16) 0 var(--s10);position:relative;overflow:hidden}
+footer{background:var(--surface);color:var(--ink-muted);padding:var(--s16) 0 var(--s10);position:relative;overflow:hidden}
 .foot-top{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,.8fr));gap:var(--s10);
   padding-bottom:var(--s10);border-bottom:1px solid var(--stage-hairline)}
 .foot-brand h3{color:#fff;font-size:var(--fs-title);margin-bottom:var(--s3)}
 .foot-brand p{font-size:var(--fs-sm);max-width:44ch;line-height:1.7}
-.foot-col h4{color:var(--stage-ink);font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;margin-bottom:var(--s4)}
+.foot-col h4{color:var(--ink);font-size:var(--fs-xs);letter-spacing:.1em;text-transform:uppercase;margin-bottom:var(--s4)}
 .foot-col ul{display:grid;gap:var(--s3)}
 .foot-col li{font-size:var(--fs-sm);line-height:var(--lh-snug)}
-.foot-col span{color:var(--stage-muted)}
+.foot-col span{color:var(--ink-muted)}
 .foot-cta{display:inline-flex;align-items:center;gap:7px;margin-top:var(--s4);
   color:var(--cyan);font-size:var(--fs-xs);font-weight:600;transition:gap var(--t-instant)}
 .foot-cta:hover{gap:11px;color:#7DD3FC}
@@ -632,10 +632,43 @@ section,#top,footer{contain:layout style}
     content:"本页面面向桌面端展示，建议在 1280px 及以上宽度的窗口浏览";
     position:fixed;left:0;right:0;bottom:0;z-index:300;
     padding:var(--s3) var(--s4);text-align:center;
-    font-size:var(--fs-xs);color:var(--stage-ink);
+    font-size:var(--fs-xs);color:var(--ink);
     background:rgba(11,17,32,.92);backdrop-filter:blur(6px);
     border-top:1px solid var(--stage-hairline)}
 }
+
+/* ── Hero Animated Demo Module ─────────────────────────────────────── */
+.hero-demo{position:relative;min-width:0}
+.hero-demo-frame{
+  position:relative;border-radius:var(--r-lg);overflow:hidden;
+  border:1px solid var(--hairline-strong);
+  background:var(--surface);
+  box-shadow:var(--e3);
+  transition:transform var(--t-layout) var(--ease-out-expo),
+             box-shadow var(--t-layout) var(--ease-out-expo)}
+.hero-demo-frame:hover{transform:translateY(-4px);box-shadow:var(--e3)}
+.hero-demo-bar{
+  display:flex;align-items:center;gap:var(--s2);
+  padding:var(--s3) var(--s4);background:var(--surface-2);
+  border-bottom:1px solid var(--hairline)}
+.hero-demo-bar .demo-dot{width:9px;height:9px;border-radius:50%;display:block}
+.hero-demo-bar .demo-dot:nth-child(1){background:var(--danger)}
+.hero-demo-bar .demo-dot:nth-child(2){background:var(--peach-real)}
+.hero-demo-bar .demo-dot:nth-child(3){background:var(--success)}
+.hero-demo-bar span{
+  margin-left:var(--s3);font-size:var(--fs-micro);color:var(--ink-muted);
+  letter-spacing:.02em}
+.hero-demo canvas{display:block;width:100%;height:auto}
+.demo-log{
+  padding:var(--s3) var(--s4);font-family:var(--mono);font-size:var(--fs-micro);
+  color:var(--ink-muted);border-top:1px solid var(--hairline);
+  max-height:80px;overflow:hidden;line-height:1.7}
+.demo-log .ln{opacity:0;animation:logIn .35s ease-out forwards}
+@keyframes logIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.demo-log .t{color:var(--ink-subtle)}
+.demo-log .ok{color:var(--success)}
+.demo-log .warn{color:var(--peach-real)}
+.demo-log .bad{color:var(--danger)}
 </style>
 </head>
 <body>
@@ -673,30 +706,22 @@ section,#top,footer{contain:layout style}
       </div>
 
       <!-- 终端窗口：库产品以代码为界面 -->
-      <div class="hero-shot reveal reveal-scale" style="--i:0">
-        <div class="hero-shot-frame">
-          <div class="hero-shot-bar">
-            <i></i><i></i><i></i>
-            <span>llm-router · 一次调用，全链路托管</span>
+      
+      <div class="hero-demo reveal reveal-scale" style="--i:0">
+        <div class="hero-demo-frame">
+          <div class="hero-demo-bar">
+            <span class="demo-dot"></span>
+            <span class="demo-dot"></span>
+            <span class="demo-dot"></span>
+            <span>llm-router · live route simulation</span>
           </div>
-          <pre><span class="c-k">from</span> llm_router <span class="c-k">import</span> call_llm, call_llm_json
-
-<span class="c-c"># P1 限流自动切 P2，熔断后按实测延迟重排</span>
-text = call_llm(<span class="c-s">"总结这段日志的异常点"</span>,
-                system_prompt=<span class="c-s">"你是运维专家"</span>)
-
-<span class="c-c"># 强制 JSON Schema：tool_choice 约束，非提示词自觉</span>
-alert = call_llm_json(
-    <span class="c-s">"提取告警等级与影响面"</span>,
-    schema={<span class="c-s">"type"</span>: <span class="c-s">"object"</span>,
-            <span class="c-s">"properties"</span>: {
-                <span class="c-s">"severity"</span>: {<span class="c-s">"enum"</span>: [<span class="c-s">"P0"</span>, <span class="c-s">"P1"</span>, <span class="c-s">"P2"</span>]},
-                <span class="c-s">"impact"</span>:   {<span class="c-s">"type"</span>: <span class="c-s">"string"</span>}}})
-
-<span class="c-ok">→ {"severity": "P1", "impact": "核心库写延迟"}</span></pre>
+          <canvas id="heroDemoCanvas" width="480" height="320"></canvas>
+          <div class="demo-log" id="demoLog"></div>
         </div>
       </div>
     </div>
+  </div>
+
 
     <div class="hero-stats">
       <div class="stat reveal reveal-digits" style="--i:0"><div class="n">1<span>个文件</span></div><div class="l">llm_router.py 拷走即用</div></div>
@@ -960,18 +985,18 @@ tool = {type: <span class="c-s">"function"</span>, function: {
     <div class="grid g2" style="margin-bottom:var(--s10)">
       <div class="card card--stage reveal reveal-stack" style="--i:6">
         <div class="icon-box ib-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="8" cy="7" r="1.6" fill="currentColor" stroke="none"/><circle cx="8" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="8" cy="17" r="1.6" fill="currentColor" stroke="none"/></svg></div>
-        <h3 style="color:var(--stage-ink)">失败路径全覆盖</h3>
-        <p class="desc" style="color:var(--stage-muted)">配置缺失返回 None 并告警，不打断调用方；空响应切候选不熔断（避免污染熔断计数器）；拒答文本计入重试耗尽后放弃——三类「软失败」与硬错、瞬错严格区分，各自的处置互不误伤。</p>
+        <h3 style="color:var(--ink)">失败路径全覆盖</h3>
+        <p class="desc" style="color:var(--ink-muted)">配置缺失返回 None 并告警，不打断调用方；空响应切候选不熔断（避免污染熔断计数器）；拒答文本计入重试耗尽后放弃——三类「软失败」与硬错、瞬错严格区分，各自的处置互不误伤。</p>
       </div>
       <div class="card card--stage reveal reveal-stack" style="--i:7">
         <div class="icon-box ib-lav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v6M12 15v6M3 12h6M15 12h6"/><circle cx="12" cy="12" r="3"/></svg></div>
-        <h3 style="color:var(--stage-ink)">进程内状态机</h3>
-        <p class="desc" style="color:var(--stage-muted)">熔断计时、延迟采样、key 索引、TTL 缓存全部为进程内状态，读写均有锁保护（读-改-写整段持锁，杜绝并发覆盖）。无外部存储、无守护线程，单进程即完整运行时。</p>
+        <h3 style="color:var(--ink)">进程内状态机</h3>
+        <p class="desc" style="color:var(--ink-muted)">熔断计时、延迟采样、key 索引、TTL 缓存全部为进程内状态，读写均有锁保护（读-改-写整段持锁，杜绝并发覆盖）。无外部存储、无守护线程，单进程即完整运行时。</p>
       </div>
     </div>
 
     <div class="reveal reveal-slide from-right">
-      <h3 style="font-size:var(--fs-base);color:var(--stage-ink);margin:0 0 var(--s5);padding-left:var(--s4);border-left:3px solid var(--cyan)">技术栈</h3>
+      <h3 style="font-size:var(--fs-base);color:var(--ink);margin:0 0 var(--s5);padding-left:var(--s4);border-left:3px solid var(--cyan)">技术栈</h3>
       <table class="tech-table">
         <thead><tr><th>层</th><th>选型</th><th>说明</th></tr></thead>
         <tbody>
@@ -1701,5 +1726,123 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
   else boot();
 })();
 </script>
+
+/* ═══════════════ Hero Animated Demo ═══════════════ */
+(function(){
+  const cv = document.getElementById('heroDemoCanvas');
+  if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let W, H, nodes = [], particles = [], animId;
+  
+  function resize(){
+    const rect = cv.parentElement.getBoundingClientRect();
+    W = cv.width = rect.width * devicePixelRatio;
+    H = cv.height = 280 * devicePixelRatio;
+    cv.style.height = '280px';
+    initNodes();
+  }
+  
+  function initNodes(){
+    nodes = [
+      {x: W*0.15, y: H*0.5, label: 'P1', color: '#3B82F6', status: 'active'},
+      {x: W*0.38, y: H*0.3, label: 'P2', color: '#06B6D4', status: 'standby'},
+      {x: W*0.38, y: H*0.7, label: 'P3', color: '#8B5CF6', status: 'standby'},
+      {x: W*0.62, y: H*0.5, label: 'P4', color: '#10B981', status: 'standby'},
+      {x: W*0.85, y: H*0.5, label: 'OUT', color: '#F59E0B', status: 'output'}
+    ];
+  }
+  
+  function spawnParticle(){
+    const start = nodes[0];
+    const end = nodes[Math.floor(Math.random() * 3) + 1];
+    particles.push({
+      x: start.x, y: start.y,
+      tx: end.x, ty: end.y,
+      progress: 0,
+      speed: 0.008 + Math.random() * 0.012,
+      color: start.color,
+      size: (2 + Math.random() * 2) * devicePixelRatio
+    });
+  }
+  
+  function update(){
+    ctx.clearRect(0,0,W,H);
+    
+    // Draw connections
+    ctx.strokeStyle = 'rgba(148,163,184,.15)';
+    ctx.lineWidth = 1 * devicePixelRatio;
+    for(let i=0;i<nodes.length-1;i++){
+      ctx.beginPath();
+      ctx.moveTo(nodes[i].x, nodes[i].y);
+      ctx.lineTo(nodes[i+1].x, nodes[i+1].y);
+      ctx.stroke();
+    }
+    
+    // Draw nodes
+    nodes.forEach(n => {
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, 18*devicePixelRatio, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,.9)';
+      ctx.fill();
+      ctx.strokeStyle = n.color;
+      ctx.lineWidth = 2*devicePixelRatio;
+      ctx.stroke();
+      
+      ctx.fillStyle = n.color;
+      ctx.font = `600 ${11*devicePixelRatio}px ui-monospace, monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(n.label, n.x, n.y);
+    });
+    
+    // Update and draw particles
+    for(let i=particles.length-1;i>=0;i--){
+      const p = particles[i];
+      p.progress += p.speed;
+      if(p.progress >= 1){
+        particles.splice(i,1);
+        continue;
+      }
+      const x = p.x + (p.tx - p.x) * p.progress;
+      const y = p.y + (p.ty - p.y) * p.progress;
+      ctx.beginPath();
+      ctx.arc(x, y, p.size, 0, Math.PI*2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = 0.8;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    
+    // Spawn new particles
+    if(Math.random() < 0.06) spawnParticle();
+    
+    animId = requestAnimationFrame(update);
+  }
+  
+  window.addEventListener('resize', resize);
+  resize();
+  update();
+  
+  // Log demo
+  const logEl = document.getElementById('demoLog');
+  const messages = [
+    {text: 'route: P1 → P2 (429 rotate key)', cls: 'warn', delay: 1000},
+    {text: 'P2-k1 timeout → mark_dead (300s)', cls: 'bad', delay: 2500},
+    {text: 'P3-k1 200 OK · 1.5s · 94 tok', cls: 'ok', delay: 4000},
+    {text: 'cache_write: sha256 ✓', cls: 'ok', delay: 5500},
+  ];
+  
+  messages.forEach(m => {
+    setTimeout(() => {
+      if(!logEl) return;
+      const t = new Date().toTimeString().slice(0,8);
+      const ln = document.createElement('div');
+      ln.className = 'ln';
+      ln.innerHTML = `<span class="t">${t}</span> <span class="${m.cls}">${m.text}</span>`;
+      logEl.appendChild(ln);
+      while(logEl.children.length > 4) logEl.removeChild(logEl.firstChild);
+    }, m.delay);
+  });
+})();
 </body>
 </html>
