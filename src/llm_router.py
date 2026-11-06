@@ -85,6 +85,11 @@ def _to_float(value: Any, ctx: str = "") -> float:
 _MILLISECONDS_PER_SECOND = 1000
 _BYTES_PER_KIB = 1024
 
+# 在途图片读入上限（32MB）：
+# 超过上限的图片直接拒绝，避免一次性把大文件读进内存（OOM 风险）。
+# 2MB 以上的图片会走 Pillow 压缩通路，但压缩前仍需先读入原始字节。
+_MAX_IMAGE_READ_BYTES = 32 * 1024 * 1024  # 32MB
+
 # ════════════════════════════════════════════════════════════════════════════
 # 默认参数（均可被 YAML defaults 段覆盖）
 # ════════════════════════════════════════════════════════════════════════════
@@ -439,17 +444,33 @@ def _build_candidates_from_yaml(data: Dict[str, Any]) -> List[Candidate]:
     return out
 
 
-def _eg_keys_pool(var_prefix: str) -> List[str]:
-    """多 key 池：优先 KEY_N 索引（KEY1,KEY2,...），兜底单 KEY。"""
+def _eg_keys_pool(var_base: str) -> List[str]:
+    """多 key 池：优先编号池（``{var_base}1`` … ``{var_base}11``），兜底单 KEY。
+
+    参数 ``var_base`` 是**完整变量名的公共基名**（不含编号），
+    例如 ``LLM_P1_KEY``（对应 ``LLM_P1_KEY1``…``LLM_P1_KEY11`` 与 ``LLM_P1_KEY``）。
+
+    约定（契约，写死在此以免调用方误解）：
+
+    1. 编号池：依次读 ``{var_base}1`` … ``{var_base}11``，遇首个空值即停
+       （编号必须连续，空号后面不再探测）。
+    2. 单 KEY 兜底：编号池全空时读 ``{var_base}`` 本身。
+
+    ⚠️ **不接受以 ``_`` 结尾的前缀**（如 ``LLM_P1_``）。前缀形式无法唯一确定
+    key 变量的完整名——旧实现用 ``var_prefix[:-1]`` 截断取 ``LLM_P1``，
+    静默读到错误变量名 → 兜底失效且无任何报错。当前所有调用点都传完整基名
+    （``prefix + "KEY"`` / ``f"LLM_P{n}_KEY"``），故该隐患已消除：截断分支
+    直接删除，按前缀语义传参会立即读不到值而不是静默取错变量。
+    """
     pool: List[str] = []
     for n in range(1, 12):
-        v = (_eg(f"{var_prefix}{n}") or "").strip()
+        v = (_eg(f"{var_base}{n}") or "").strip()
         if not v:
             break
         pool.append(v)
     if pool:
         return pool
-    single = (_eg(f"{var_prefix[:-1]}") if var_prefix.endswith("_") else _eg(var_prefix)).strip()
+    single = (_eg(var_base) or "").strip()
     return [single] if single else []
 
 
@@ -522,13 +543,47 @@ def _build_candidates() -> List[Candidate]:
     return _build_candidates_env()
 
 
+def _backoff_wait(attempt: int) -> int:
+    """取第 attempt 次重试的退避秒数，**绝不越界**。
+
+    旧实现直接 `LLM_RETRY_BACKOFF[attempt]`：当 LLM_RETRY_MAX 大于退避数组长度
+    （如 LLM_RETRY_MAX=5 而退避只有 1,3,5 三项）时抛 IndexError，
+    在 except 分支里再抛会打断整条重试链——一次配置错误即让所有候选直接失败。
+    越界时退化为「用数组最后一项」，不足时用 0（即不额外等待）。
+    """
+    if not LLM_RETRY_BACKOFF:
+        return 0
+    if attempt < 0:
+        attempt = 0
+    if attempt >= len(LLM_RETRY_BACKOFF):
+        return LLM_RETRY_BACKOFF[-1]
+    return LLM_RETRY_BACKOFF[attempt]
+
+
+def _mask_key(key: str) -> str:
+    """脱敏密钥：任何长度下**都不暴露完整明文**，且统一用 '...' 标记遮蔽段。
+
+    长 key（>16）露头 8 尾 4；短 key 只露头部、其余整体遮蔽 ——
+    原实现对 ≤4 字符的 key 取 key[:4]，等于把明文原样吐出（脱敏形同虚设）；
+    对 5~16 字符的 key 只留 4 位头 + '***'，看不出被遮蔽了多少位。
+    """
+    n = len(key)
+    if n == 0:
+        return ""
+    if n > 16:
+        return key[:8] + "..." + key[-4:]
+    # 短 key：留出的头部必须严格短于 key 本身，否则仍会泄露全文
+    head = min(2, n - 1) if n > 1 else 0
+    return key[:head] + "..." + "*" * max(3, n - head)
+
+
 def list_endpoints() -> List[Dict[str, Any]]:
     """列出当前所有可用候选端点（诊断用）。返回脱敏视图（key 只露头尾）。"""
     cands = _build_candidates()
     return [
         {
             "tag": c.tag, "url": c.url, "model": c.model,
-            "key": c.key[:8] + "..." + c.key[-4:] if len(c.key) > 16 else c.key[:4] + "***",
+            "key": _mask_key(c.key),
         }
         for c in cands
     ]
@@ -558,12 +613,31 @@ def _detect_mime_from_bytes(raw: bytes) -> Optional[str]:
 
 
 def _read_image_bytes(image_path: str) -> Optional[bytes]:
-    """读图片；>2MB 自动 Pillow 缩到 1600px + JPEG85%。"""
+    """读图片；>2MB 自动 Pillow 缩到 1600px + JPEG85%。
+
+    读入上限 ``_MAX_IMAGE_READ_BYTES``：先取文件大小，超过上限直接拒绝，
+    避免 ``read()`` 一次性把超大文件读进内存（调用方传大文件即 OOM）。
+    """
     try:
-        with open(image_path, "rb") as fh:
-            raw = fh.read()
+        size = os.path.getsize(image_path)
     except OSError as e:
         logger.error("读图失败: %s", e)
+        return None
+    if size > _MAX_IMAGE_READ_BYTES:
+        logger.error(
+            "图片过大: %s (%d 字节 > 上限 %d 字节)",
+            image_path, size, _MAX_IMAGE_READ_BYTES,
+        )
+        return None
+    try:
+        with open(image_path, "rb") as fh:
+            raw = fh.read(_MAX_IMAGE_READ_BYTES + 1)
+    except OSError as e:
+        logger.error("读图失败: %s", e)
+        return None
+    # 兜底：读入期间文件可能变大（TOCTOU），超出上限即丢弃
+    if len(raw) > _MAX_IMAGE_READ_BYTES:
+        logger.error("图片过大（读入期间增长）: %s", image_path)
         return None
     if len(raw) <= 2 * _BYTES_PER_KIB * _BYTES_PER_KIB:
         return raw
@@ -918,7 +992,7 @@ def call_llm(
                 if content and _looks_like_refusal(content):
                     last_err = RuntimeError("refusal: %.80s" % content)
                     if attempt < LLM_RETRY_MAX - 1:
-                        wait = LLM_RETRY_BACKOFF[attempt]
+                        wait = _backoff_wait(attempt)
                         logger.warning("LLM(%s) 拒答重试 %d/%d: %ds", tag, attempt + 1, LLM_RETRY_MAX, wait)
                         time.sleep(wait)
                         continue
@@ -947,7 +1021,7 @@ def call_llm(
                     logger.warning("LLM(%s) 硬错误→熔断跳过: %s", tag, e)
                     break
                 if attempt < LLM_RETRY_MAX - 1:
-                    wait = LLM_RETRY_BACKOFF[attempt]
+                    wait = _backoff_wait(attempt)
                     logger.warning("LLM(%s) 瞬错重试 %d/%d: %s, 等待 %ds", tag, attempt + 1, LLM_RETRY_MAX, e, wait)
                     time.sleep(wait)
                 else:

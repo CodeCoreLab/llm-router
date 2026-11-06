@@ -361,6 +361,33 @@ class TestListEndpointsMasked(unittest.TestCase):
         self.assertNotIn("verylongsecretkey", k)  # 明文不出现在诊断视图
         self.assertIn("...", k)
 
+    def test_short_key_not_leaked_verbatim(self):
+        """短 key（≤4 字符）不得被原样吐出 —— 旧实现 key[:4] 会泄露全文。"""
+        for raw in ("abcd", "abc", "a", "ab"):
+            with self.subTest(key=raw):
+                masked = llm_router._mask_key(raw)
+                self.assertNotIn(raw, masked)
+                self.assertIn("...", masked)
+
+    def test_medium_key_masked_and_not_verbatim(self):
+        """5~16 字符的 key：脱敏后不得等于原文，且必须带遮蔽标记。"""
+        raw = "sk-REDACTED"
+        masked = llm_router._mask_key(raw)
+        self.assertNotEqual(masked, raw)
+        self.assertNotIn(raw, masked)
+        self.assertIn("...", masked)
+
+    def test_long_key_keeps_head_and_tail(self):
+        """长 key（>16）保留头 8 尾 4 的既有行为。"""
+        raw = "sk-" + "A" * 20 + "WXYZ"
+        masked = llm_router._mask_key(raw)
+        self.assertTrue(masked.startswith(raw[:8]))
+        self.assertTrue(masked.endswith(raw[-4:]))
+        self.assertNotIn(raw, masked)
+
+    def test_empty_key(self):
+        self.assertEqual(llm_router._mask_key(""), "")
+
 
 class TestEnvShParsing(unittest.TestCase):
     def setUp(self):
@@ -382,6 +409,122 @@ class TestEnvShParsing(unittest.TestCase):
             self.assertNotIn("EMPTY", data)
         finally:
             os.unlink(path)
+
+
+class TestBackoffWait(unittest.TestCase):
+    """退避取值必须绝不越界（旧实现 LLM_RETRY_BACKOFF[attempt] 会 IndexError）。"""
+
+    def setUp(self):
+        _reset_state()
+
+    def test_in_range_returns_configured_value(self):
+        llm_router.LLM_RETRY_BACKOFF = [1, 3, 5]
+        self.assertEqual(llm_router._backoff_wait(0), 1)
+        self.assertEqual(llm_router._backoff_wait(2), 5)
+
+    def test_out_of_range_falls_back_to_last(self):
+        llm_router.LLM_RETRY_BACKOFF = [1, 3, 5]
+        # 重试次数大于退避数组长度时不得抛 IndexError
+        self.assertEqual(llm_router._backoff_wait(3), 5)
+        self.assertEqual(llm_router._backoff_wait(99), 5)
+
+    def test_negative_attempt_is_clamped(self):
+        llm_router.LLM_RETRY_BACKOFF = [2, 4]
+        self.assertEqual(llm_router._backoff_wait(-1), 2)
+
+    def test_empty_backoff_returns_zero(self):
+        llm_router.LLM_RETRY_BACKOFF = []
+        self.assertEqual(llm_router._backoff_wait(0), 0)
+        self.assertEqual(llm_router._backoff_wait(5), 0)
+
+    def test_retry_max_larger_than_backoff_does_not_raise(self):
+        """模拟真实误配：RETRY_MAX=5 而退避只有 3 项。"""
+        llm_router.LLM_RETRY_MAX = 5
+        llm_router.LLM_RETRY_BACKOFF = [1, 3, 5]
+        for attempt in range(llm_router.LLM_RETRY_MAX - 1):
+            self.assertIsInstance(llm_router._backoff_wait(attempt), int)
+
+
+class TestReadImageBytes(unittest.TestCase):
+    """图片读入必须有大小上限（避免一次性读入超大文件撑爆内存）。"""
+
+    def setUp(self):
+        _reset_state()
+
+    def test_reads_small_file(self):
+        import tempfile
+        with tempfile.NamedTemporaryFile("wb", suffix=".png", delete=False) as fh:
+            fh.write(b"\x89PNG\r\n\x1a\n" + b"0" * 32)
+            path = fh.name
+        try:
+            data = llm_router._read_image_bytes(path)
+            self.assertIsNotNone(data)
+            self.assertGreater(len(data), 0)
+        finally:
+            os.unlink(path)
+
+    def test_oversize_file_returns_none(self):
+        import tempfile
+        with tempfile.NamedTemporaryFile("wb", suffix=".png", delete=False) as fh:
+            fh.write(b"\x89PNG\r\n\x1a\n" + b"0" * (llm_router._MAX_IMAGE_READ_BYTES + 1024))
+            path = fh.name
+        try:
+            self.assertIsNone(llm_router._read_image_bytes(path))
+        finally:
+            os.unlink(path)
+
+    def test_missing_file_returns_none(self):
+        self.assertIsNone(llm_router._read_image_bytes("/nonexistent/definitely-missing.png"))
+
+
+class TestEgKeysPool(unittest.TestCase):
+    """`_eg_keys_pool` 契约：入参必须是完整变量基名（B11）。
+
+    旧实现带一条 `var_prefix[:-1]` 截断分支，本意兼容「前缀」入参
+    （如 `LLM_P1_`），但截断后得到的是 `LLM_P1` —— 与真实的
+    `LLM_P1_KEY` 无关 → 静默取到空值、单 KEY 兜底失效且无任何报错。
+    现在截断分支已删除，前缀入参会立刻读不到值（fail-fast 而非静默取错）。
+    """
+
+    def setUp(self):
+        _reset_state()
+
+    def _env(self, **kv):
+        """注入一批环境变量（只保留本次指定的 key）。"""
+        patcher = mock.patch.dict(os.environ, kv, clear=False)
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def test_numbered_pool_takes_sequential_keys(self):
+        self._env(LLM_P1_KEY1="k1", LLM_P1_KEY2="k2", LLM_P1_KEY3="k3")
+        self.assertEqual(
+            llm_router._eg_keys_pool("LLM_P1_KEY"), ["k1", "k2", "k3"]
+        )
+
+    def test_numbered_pool_stops_at_first_gap(self):
+        """编号必须连续：空号之后不再探测。"""
+        self._env(LLM_P1_KEY1="k1", LLM_P1_KEY3="k3")
+        self.assertEqual(llm_router._eg_keys_pool("LLM_P1_KEY"), ["k1"])
+
+    def test_single_key_fallback_uses_exact_var_name(self):
+        """无编号时回落到基名本身（`LLM_P1_KEY`）。"""
+        self._env(LLM_P1_KEY="single")
+        self.assertEqual(llm_router._eg_keys_pool("LLM_P1_KEY"), ["single"])
+
+    def test_prefix_semantics_no_longer_silently_reads_wrong_var(self):
+        """旧实现：`_eg_keys_pool("LLM_P1_")` 会去读 `LLM_P1`（错误变量名）。"""
+        self._env(LLM_P1="wrong-var", LLM_P1_KEY="right-var")
+        # 现在不再截断 → 读 `LLM_P1_1`… 与 `LLM_P1_` → 全空
+        self.assertEqual(llm_router._eg_keys_pool("LLM_P1_"), [])
+        # 正确的传法依然工作
+        self.assertEqual(llm_router._eg_keys_pool("LLM_P1_KEY"), ["right-var"])
+
+    def test_empty_returns_empty_list(self):
+        self.assertEqual(llm_router._eg_keys_pool("LLM_NOT_EXIST_KEY"), [])
+
+    def test_whitespace_only_key_is_ignored(self):
+        self._env(LLM_P1_KEY="   ")
+        self.assertEqual(llm_router._eg_keys_pool("LLM_P1_KEY"), [])
 
 
 if __name__ == "__main__":
