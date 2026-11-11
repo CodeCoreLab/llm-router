@@ -772,7 +772,7 @@ section,#top,footer{contain:layout style}
       <a href="#features">核心功能</a>
       <a href="#architecture">管线</a>
       <a href="#advantage">对比</a>
-      <a href="#quickstart">快速开始</a>
+      <a href="#release">下载</a>
       <a href="changelog.html">更新日志</a>
       <a href="https://xmtooldev.gf.com.cn/">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px"><path d="M15 6l-6 6 6 6"/></svg>
@@ -803,9 +803,9 @@ section,#top,footer{contain:layout style}
         </p>
         <p class="lede lede-punch">LLM Router —— 把多供应商接入收敛为一个函数调用。</p>
         <div class="hero-cta" role="group" aria-label="产品操作">
-          <a class="btn btn-primary" href="#quickstart">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-5 6 5 6"/><path d="M16 6l5 6-5 6"/></svg>
-            快速开始
+          <a class="btn btn-primary" href="https://xmtooldev.gf.com.cn/llm-router/assets/llm-router-source.zip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+            下载
           </a>
           <a class="btn btn-ghost" href="#architecture">路由管线</a>
         </div>
@@ -830,7 +830,7 @@ section,#top,footer{contain:layout style}
 
     <div class="hero-stats">
       <div class="stat reveal reveal-digits" style="--i:0"><div class="n">1<span>个文件</span></div><div class="l">llm_router.py 拷走即用</div></div>
-      <div class="stat reveal reveal-digits" style="--i:1"><div class="n">36<span>项</span></div><div class="l">离线单元测试全部通过</div></div>
+      <div class="stat reveal reveal-digits" style="--i:1"><div class="n">54<span>项</span></div><div class="l">离线单元测试全部通过</div></div>
       <div class="stat reveal reveal-digits" style="--i:2"><div class="n">1<span>个依赖</span></div><div class="l">仅 requests，其余可选</div></div>
       <div class="stat reveal reveal-digits" style="--i:3"><div class="n">12<span>级候选</span></div><div class="l">P1→P12 优先级路由</div></div>
     </div>
@@ -1054,7 +1054,7 @@ tool = {type: <span class="c-s">"function"</span>, function: {
         从配置到返回，数据单向流动：每一段只依赖上游产物，任何一段失败
         都以「跳过或上抛」收场，不产生半成品结果。</p>
       <ul class="head-points">
-        <li><b>可测试</b>：五段均为纯函数或近纯函数，36 项测试全部离线 mock 完成。</li>
+        <li><b>可测试</b>：五段均为纯函数或近纯函数，54 项测试全部离线 mock 完成。</li>
         <li><b>可观测</b>：结构化 JSON 日志开关，命中端点、延迟、缓存命中均可留痕。</li>
         <li><b>可诊断</b>：list_endpoints() 随时导出当前候选链（key 自动脱敏）。</li>
       </ul>
@@ -1110,7 +1110,7 @@ tool = {type: <span class="c-s">"function"</span>, function: {
           <tr><td>配置</td><td>PyYAML（可选）</td><td>缺失时自动回退环境变量，不阻断启动</td></tr>
           <tr><td>多模态</td><td>Pillow（可选）</td><td>&gt;2MB 图片自动缩至 1600px + JPEG 85%，缺失用原始字节</td></tr>
           <tr><td>并发安全</td><td>threading.Lock</td><td>熔断/缓存/会话三处锁，读-改-写整段持锁</td></tr>
-          <tr><td>测试</td><td>unittest + mock</td><td>36 项离线用例，不打真实端点</td></tr>
+          <tr><td>测试</td><td>unittest + mock</td><td>54 项离线用例，不打真实端点</td></tr>
         </tbody>
       </table>
     </div>
@@ -1258,14 +1258,14 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
 
     <div class="quality-grid" style="margin-bottom:var(--s16)">
       <div class="card reveal reveal-cards" style="--i:1"><div class="card-topline"></div>
-        <div class="q-num">36<small>项</small></div>
+        <div class="q-num">54<small>项</small></div>
         <div class="q-label">离线单元测试全通过</div>
         <p class="q-desc">覆盖候选构造与去重、多 key 展开、env 插值、拒答检测、错误分类、熔断状态机、缓存淘汰、推理预算放大与端到端降级路由。</p>
       </div>
       <div class="card reveal reveal-cards" style="--i:2"><div class="card-topline"></div>
         <div class="q-num">1<small>个文件</small></div>
         <div class="q-label">单文件交付</div>
-        <p class="q-desc">llm_router.py 一个文件约 1100 行，分区段注释导航；无包结构要求，拷入任意项目即可 import。</p>
+        <p class="q-desc">llm_router.py 一个文件约 1200 行，分区段注释导航；无包结构要求，拷入任意项目即可 import。</p>
       </div>
       <div class="card reveal reveal-cards" style="--i:3"><div class="card-topline"></div>
         <div class="q-num">1<small>个必装依赖</small></div>
@@ -1293,7 +1293,7 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
 
     <div class="release">
       <div class="rel-card recommended reveal reveal-cards" style="--i:6">
-        <span class="rel-badge">拷入式 · v1.0 · 52KB</span>
+        <span class="rel-badge">拷入式 · v1.0 · 54KB</span>
         <div class="rel-size">1<small style="font-size:.42em">个文件</small></div>
         <div class="rel-name">拷入式 · 单文件形态</div>
         <div class="rel-sub">体积最小的接入形态，适用于脚本型项目与一次性任务。拷入 src/ 后 import 即用，与宿主项目零耦合。</div>
@@ -1312,13 +1312,17 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
         <span class="rel-badge rel-badge-alt">仓库复用 · v1.0</span>
         <div class="rel-size">3<small style="font-size:.42em">类资产</small></div>
         <div class="rel-name">仓库复用 · 完整形态</div>
-        <div class="rel-sub">源码之外附带示例配置、36 项离线测试与完整文档，适用于多项目共享同一套路由基线的团队场景。</div>
+        <div class="rel-sub">源码之外附带示例配置、54 项离线测试与完整文档，适用于多项目共享同一套路由基线的团队场景。</div>
         <dl class="rel-meta">
           <div><dt>构成</dt><dd>src + config + tests + docs</dd></div>
           <div><dt>前提</dt><dd>同上（唯一必装 requests）</dd></div>
           <div><dt>测试</dt><dd>python -m pytest tests/ -v</dd></div>
           <div><dt>适用</dt><dd>monorepo / 团队共享基线</dd></div>
         </dl>
+        <a class="dl-btn dl-primary" href="https://xmtooldev.gf.com.cn/llm-router/assets/llm-router-source.zip" aria-label="下载 llm-router 完整源码包（zip）">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          下载完整源码包
+        </a>
         <a class="dl-btn dl-ghost" href="https://github.com/CodeCoreLab/llm-router" target="_blank" rel="noopener" aria-label="浏览 llm-router 仓库目录（新窗口打开 GitHub）">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14L21 3"/><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
           浏览仓库目录
@@ -1380,9 +1384,9 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
         <span>LLM Router —— 为多供应商接入而构建。</span>
       </p>
       <div class="closing-cta reveal reveal-lines" style="--i:4">
-        <a class="btn btn-primary" href="#quickstart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-5 6 5 6"/><path d="M16 6l5 6-5 6"/></svg>
-          快速开始
+        <a class="btn btn-primary" href="https://xmtooldev.gf.com.cn/llm-router/assets/llm-router-source.zip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          下载
         </a>
         <a class="btn btn-ghost" href="#top">回到顶部</a>
       </div>
@@ -1400,9 +1404,9 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
       <div class="foot-brand reveal reveal-lines" style="--i:0">
         <h3>LLM Router</h3>
         <p>可移植的单文件多端点 LLM 路由客户端。纯客户端运行，无服务端、无遥测；密钥经环境变量注入，配置与日志零明文。</p>
-        <a class="foot-cta" href="#quickstart" aria-label="查看快速开始章节">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6l-5 6 5 6"/><path d="M16 6l5 6-5 6"/></svg>
-          查看快速开始
+        <a class="foot-cta" href="#release" aria-label="前往下载章节">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          下载源码包
         </a>
       </div>
       <nav class="foot-col reveal reveal-lines" style="--i:1" aria-label="核心能力">
@@ -1419,7 +1423,7 @@ deadline = time.monotonic() + <span class="c-ok">60</span>
         <ul>
           <li><span>单文件 · 单必装依赖</span></li>
           <li><span>deadline 预算闸</span></li>
-          <li><span>36 项离线单元测试</span></li>
+          <li><span>54 项离线单元测试</span></li>
           <li><span>${VAR} 凭据注入 · 诊断脱敏</span></li>
         </ul>
       </nav>
