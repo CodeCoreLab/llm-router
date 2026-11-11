@@ -68,7 +68,7 @@
   --fs-metric-lg:clamp(30px,3.6vw,38px);
 
   --lh-tight:1.25; --lh-snug:1.45; --lh-body:1.62; --lh-loose:1.72;
-  --mono:"Cascadia Mono","JetBrains Mono",Consolas,"SF Mono",monospace;
+  --mono:"Cascadia Mono","JetBrains Mono",Consolas,"SF Mono","Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;
 
   --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:22px; --r-full:9999px;
 
@@ -110,7 +110,7 @@ ul{margin:0;padding:0;list-style:none}
 canvas{display:block}
 
 .wrap{width:min(100% - var(--s8), var(--maxw));margin-inline:auto}
-.mono{font-family:"Cascadia Mono","JetBrains Mono",Consolas,"SF Mono",Monaco,monospace;font-variant-ligatures:none}
+.mono{font-family:"Cascadia Mono","JetBrains Mono",Consolas,"SF Mono",Monaco,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-variant-ligatures:none}
 
 /* ── Eyebrow / Section head ───────────────────────────────────────── */
 .eyebrow{
@@ -191,7 +191,7 @@ section.tight{padding:var(--s20) 0}
   letter-spacing:.02em}
 .hero-shot pre{
   margin:0;padding:var(--s5);overflow-x:auto;
-  font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.85;
+  font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs);line-height:1.85;
   color:#334155;white-space:pre;font-variant-numeric:tabular-nums}
 .hero-shot::after{
   content:"";position:absolute;inset:auto -6% -12% -6%;height:44%;pointer-events:none;
@@ -362,7 +362,7 @@ section.tight{padding:var(--s20) 0}
 .in .term-bar i:nth-child(3){animation-delay:.36s}
 @keyframes dotPulse{0%,100%{transform:scale(1);opacity:.62}50%{transform:scale(1.28);opacity:1}}
 .code-block{
-  font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.85;
+  font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs);line-height:1.85;
   color:#334155;white-space:pre;overflow-x:auto;margin:0;font-variant-numeric:tabular-nums}
 .in .code-block{animation:codeGrow var(--t-enter) var(--ease-out-expo) both}
 @keyframes codeGrow{
@@ -388,10 +388,10 @@ section.tight{padding:var(--s20) 0}
 .arch-layer:hover{background:var(--surface-3);transform:translateX(5px);border-color:rgba(59,130,246,.42)}
 .arch-layer .ly{font-size:var(--fs-xs);font-weight:700;color:var(--cyan);letter-spacing:.04em;
   display:flex;align-items:center;gap:var(--s2);min-width:0}
-.arch-layer .ly em{font-style:normal;font-size:var(--fs-micro);color:var(--ink-muted);font-weight:500}
+.arch-layer .ly em{font-style:normal;font-size:var(--fs-xs);color:var(--ink-muted);font-weight:500}
 .arch-layer .mods{display:flex;flex-wrap:wrap;gap:7px;min-width:0}
 .chip{
-  font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-micro);padding:4px 10px;border-radius:var(--r-sm);
+  font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs);padding:4px 10px;border-radius:var(--r-sm);
   background:rgba(148,163,184,.10);border:1px solid var(--stage-hairline);color:#334155;
   transition:background var(--t-instant) var(--ease-out-quint),color var(--t-instant) var(--ease-out-quint),border-color var(--t-instant) var(--ease-out-quint),transform var(--t-instant) var(--ease-out-quint)}
 .chip:hover{transform:translateY(-1px)}
@@ -417,7 +417,7 @@ section.tight{padding:var(--s20) 0}
 .tech-table tbody tr{transition:background var(--t-instant)}
 .tech-table tbody tr:hover{background:rgba(148,163,184,.06)}
 .tech-table td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
-.tech-table td:nth-child(2){color:#0369A1;font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs)}
+.tech-table td:nth-child(2){color:#0369A1;font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs)}
 .tech-table td:nth-child(3){color:var(--ink-muted);font-size:var(--fs-sm)}
 
 /* ── 差异化对比 ───────────────────────────────────────────────────── */
@@ -426,7 +426,7 @@ section.tight{padding:var(--s20) 0}
 .sec-compare>.card>.desc{flex:1 0 auto}
 .formula{
   background:var(--surface);border-radius:var(--r-md);padding:var(--s4);margin-top:var(--s4);
-  font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.9;color:#64748B;overflow-x:auto;
+  font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs);line-height:1.9;color:#64748B;overflow-x:auto;
   font-variant-numeric:tabular-nums}
 .formula b{color:#0369A1;font-weight:600}
 .formula i{color:#047857;font-style:normal}
@@ -472,7 +472,7 @@ section.tight{padding:var(--s20) 0}
 .qs-card pre{
   margin:var(--s3) 0 0;background:var(--surface);border-radius:var(--r-md);
   padding:var(--s4);overflow-x:auto;
-  font-family:"Cascadia Mono",Consolas,monospace;font-size:var(--fs-xs);line-height:1.85;color:#334155;white-space:pre}
+  font-family:"Cascadia Mono",Consolas,"Microsoft YaHei Mono","PingFang SC","Microsoft YaHei",monospace;font-size:var(--fs-xs);line-height:1.85;color:#334155;white-space:pre}
 .qs-note{font-size:var(--fs-xs);color:var(--ink-subtle);margin-top:var(--s3);line-height:1.6}
 
 /* ── 工程品质 ─────────────────────────────────────────────────────── */
